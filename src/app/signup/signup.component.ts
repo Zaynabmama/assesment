@@ -39,6 +39,8 @@ export class SignupComponent {
           email: this.email,
           role: "customer",  
         });
+        sessionStorage.setItem('userEmail', this.email);
+        sessionStorage.setItem('userRole', 'customer');
         console.log( user);
         this.errorMessage = '';
         this.router.navigate(['/home']);
