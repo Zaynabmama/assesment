@@ -1,0 +1,95 @@
+.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .login-container {
+    max-width: 300px;
+    width: 100%; 
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    text-align: center;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #555555;
+    text-align: left;
+  }
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #f8f8f8;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+  }
+.account {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #555555; 
+  }
+  
+  .account a {
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .account a:hover {
+    text-decoration: underline;
+  }
+  .error-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    padding-left: 0.5rem;
+  }
+  
+  .error-message small {
+    display: block;
+  }
+  
+
+
+  @media (max-width: 600px) {
+    .login-container {
+      padding: 30px;
+    }
+  
+    input {
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 400px) {
+    .login-container {
+      padding: 20px;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  
+    input {
+      padding: 8px;
+      font-size: 0.8rem;
+    }
+  }
+  
