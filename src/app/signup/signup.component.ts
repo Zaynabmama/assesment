@@ -31,10 +31,15 @@ export class SignupComponent {
 
   onSubmit() {
     const auth = getAuth();
+    const db = getFirestore();
     createUserWithEmailAndPassword(auth, this.email, this.password)
       .then(async(userCredential) => {
         const user = userCredential.user;
-        console.log('Signed up user:', user);
+        await setDoc(doc(db, "users", user.uid), {
+          email: this.email,
+          role: "customer",  
+        });
+        console.log( user);
         this.errorMessage = '';
         this.router.navigate(['/home']);
       })
