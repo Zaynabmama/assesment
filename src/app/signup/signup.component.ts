@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from "../components/button/button.component";
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
 
 @Component({
