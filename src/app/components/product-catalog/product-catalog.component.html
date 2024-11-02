@@ -1,12 +1,22 @@
 <div class="product-catalog">
+  <h2>Our New Collection</h2>
     <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
     <div class="product-list">
       <div *ngFor="let product of products" class="product-card">
         <img [src]="product.image" alt="{{ product.title }}" />
-        <h3>{{ product.title }}</h3>
-        <p>Price: {{ product.price }}</p>
-        <a [routerLink]="['/product', product.id]" class="read-more">Read More</a>
+        <div class="product-info">
+          <h3 class="product-title">{{ product.title }}</h3>
+          <p class="product-price"> ${{ product.price }}</p>
+          <div class="product-rating">
+            <ng-container *ngFor="let star of getStars(product.rating.rate)">
+              <i [ngClass]="star.filled ? 'fas fa-star' : 'far fa-star'"></i>
+            </ng-container></div>
+            <a [routerLink]="['/product', product.id]" class="read-more"> See details</a>
+          
+        
+        
       </div>
     </div>
+  </div>
   </div>
   
