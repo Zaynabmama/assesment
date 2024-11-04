@@ -1,6 +1,10 @@
 <nav class="navbar">
     <h1 class="navbar-title">eCommerce Catalog</h1>
     <div class="navbar-icons">
+      <div class="weather-icon">
+        <i *ngIf="weatherIcon()" [class]="weatherIcon()"></i>
+        <span *ngIf="temperature()">{{ temperature() }}°C</span>
+      </div>
       <button (click)="navigateToCart()" class="icon-button" aria-label="View Cart">
         <i class="fas fa-shopping-cart"></i>
       </button>
