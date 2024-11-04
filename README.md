@@ -1,6 +1,46 @@
 # Assesment
+# Product Catalog Application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.10.
+This is a responsive web application that allows users to browse a catalog of products. The design is modern and user-friendly, featuring a clean layout and interactive elements.
+
+## Features
+
+- **Responsive Design**: Adapts to different screen sizes for tablets and mobile devices.
+- **Product Details**: Users can view detailed information about each product.
+- **Category Navigation**: Categories are easily accessible, allowing users to filter products
+
+## Getting Started
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Zaynabmama/assesment
+   cd assesment
+   npm install
+
+## Firebase Setup
+
+To set up Firebase for the application, follow these steps:
+
+### 1. Create a Firebase Project
+
+- Go to the [Firebase Console](https://console.firebase.google.com/).
+- Click on **"Add project"** and follow the prompts to create a new project.
+
+### 2. Add a Web App
+
+- Once the project is created, click on **"Add app"** and select the web icon (`</>`).
+- Register your app and click **"Continue to console"**.
+
+### 3. Get Firebase Configuration
+
+- After creating your web app, you'll be provided with Firebase configuration settings (API key, Auth domain, etc.).
+- Copy these settings, as you will need them for your `.firbase.config.ts` file.
+
+### 4. Enable Firebase Services
+
+- In the Firebase console, enable the necessary services (like Firestore, Authentication, etc.) that your application will use.
 
 ## Development server
 
@@ -10,11 +50,8 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
+## Running unit tests (will add it)
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
