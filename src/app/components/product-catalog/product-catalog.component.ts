@@ -1,24 +1,31 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, computed } from '@angular/core';
 import { Product, ProductService } from '../../services/product.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FilterByCategoryComponent } from "../filter-by-category/filter-by-category.component";
 
 @Component({
   selector: 'app-product-catalog',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule, RouterModule, FilterByCategoryComponent],
   templateUrl: './product-catalog.component.html',
   styleUrls: ['./product-catalog.component.css'],
 })
 export class ProductCatalogComponent implements OnInit {
   @Input() category: string | null = null;
-  products: Product[] = [];
-  errorMessage: string | null = null;
+  // products: Product[] = [];
+  // errorMessage: string | null = null;
+  products = computed(() => this.productService.products());
+  errorMessage = computed(() => this.productService.error());
 
   constructor(private productService: ProductService) {}
-
+  
   ngOnInit(): void {
-    this.loadProducts();
+    if (this.category) {
+      this.loadProductsByCategory(this.category);
+    } else {
+      this.loadProducts();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -34,28 +41,24 @@ export class ProductCatalogComponent implements OnInit {
     return stars;
   }
   
-  
-  loadProducts():void {
-    if (this.category) {
-      this.productService.getProductsByCategory(this.category).subscribe({
-        next: (data) => {
-          this.products = data;
-        },
-        error: (error) => {
-          this.errorMessage = 'Failed to load products by category';
-          console.error(error);
-        },
-      });
-    } else {
-    this.productService.getProducts().subscribe({
-      next: (data) => {
-        this.products = data;
-      },
-      error: (error) => {
-        this.errorMessage = 'Failed to load product';
-        console.error(error);
-      },
-    });
+  loadProducts(): void {
+    this.productService.loadProducts();
   }
-}
+
+  loadProductsByCategory(category: string | null): void {
+    if (category) {
+      this.productService.loadProductsByCategory(category);
+    } else {
+      this.loadProducts();
+    }
+  }
+  // loadProducts():void {
+  //   if (this.category) {
+  //     this.productService.loadProductsByCategory(this.category);
+  //   } else {
+  //     this.productService.loadProducts();
+  //   }
+    
+  // }
+    
 }
