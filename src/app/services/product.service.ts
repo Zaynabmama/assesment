@@ -1,20 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-export interface Product {
-  id: number;
-  title: string;
-  price: string;
-  category: string;
-  description: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-
-}
+import { catchError, of } from 'rxjs';
+import { Product } from '../models/product';
 
 
 @Injectable({
@@ -24,66 +11,44 @@ export class ProductService {
   private apiUrl = 'https://fakestoreapi.com/products'; 
   categories = signal<string[]>([]);
   products = signal<Product[]>([]);
+  productById = signal<Product | null>(null);
   error = signal<string | null>(null);
   constructor(private http: HttpClient) {}
   
-
-  loadProducts(): void {
-    this.http.get<Product[]>(this.apiUrl).subscribe({
+  
+  private fetchData<T>(url: string, signalToUpdate: any): void {
+    this.http.get<T>(url).subscribe({
       next: (data) => {
-        this.products.set(data);
-        console.log('Loaded products:', data); 
-        this.error.set(null);
+        if (data) {
+          signalToUpdate.set(data); 
+          this.error.set(null);
+        }
       },
       error: (error) => {
-        this.error.set('Failed to load products');
+        this.error.set('Failed to load data');
         console.error(error);
-      },
+      }
     });
+  }
+
+  loadProducts(): void {
+    this.fetchData<Product[]>(this.apiUrl, this.products); // Update signal
+  
   }
 
   loadProductsByCategory(category: string): void {
-    this.http.get<Product[]>(`${this.apiUrl}/category/${category}`).subscribe({
-      next: (data) => {
-        this.products.set(data); 
-        this.error.set(null);
-      },
-      error: (error) => {
-        this.error.set('Failed to load products by category'); 
-        console.error(error);
-      },
-    });
+    this.fetchData<Product[]>(`${this.apiUrl}/category/${category}`, this.products); 
+  
   }
 
   
-  getProductById(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+  getProductById(id: number): void{
+    this.fetchData<Product>(`${this.apiUrl}/${id}`, this.productById); 
   }
-  getSortedProducts(sortOrder: 'asc' | 'desc'): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}?sort=${sortOrder}`);
-  }
+
   getCategories(): void {
-    this.http.get<string[]>(`${this.apiUrl}/categories`).subscribe({
-      next: (data) => {
-        this.categories.set(data);
-        this.error.set(null);
-      },
-      error: (error) => {
-        this.error.set('Failed to load categories');
-        console.error(error);
-      },
-    });
+    this.fetchData<string[]>(`${this.apiUrl}/categories`, this.categories); 
   }
   
   
-  addProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(this.apiUrl, product);
-  }
-  updateProduct(id: number, product: Partial<Product>): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/${id}`, product);
-  }
-  deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
 }

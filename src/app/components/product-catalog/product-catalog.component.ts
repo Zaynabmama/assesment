@@ -1,8 +1,9 @@
-import { Component, Input, OnInit, SimpleChanges, computed } from '@angular/core';
-import { Product, ProductService } from '../../services/product.service';
+import { Component, Input, OnInit, SimpleChanges, computed, effect } from '@angular/core';
+import { ProductService } from '../../services/product.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FilterByCategoryComponent } from "../filter-by-category/filter-by-category.component";
+import { getStars } from '../../utils/rating.utils';
 
 @Component({
   selector: 'app-product-catalog',
@@ -15,50 +16,41 @@ export class ProductCatalogComponent implements OnInit {
   @Input() category: string | null = null;
   // products: Product[] = [];
   // errorMessage: string | null = null;
-  products = computed(() => this.productService.products());
+//   products = computed(() => this.productService.products());
+//   errorMessage = computed(() => this.productService.error());
+  
+  products = computed(() => 
+    this.category ? this.productService.products().filter(p => p.category === this.category) : this.productService.products()
+  );
+
   errorMessage = computed(() => this.productService.error());
+
 
   constructor(private productService: ProductService) {}
   
   ngOnInit(): void {
-    if (this.category) {
-      this.loadProductsByCategory(this.category);
-    } else {
-      this.loadProducts();
-    }
+    this.loadProductsByCategory(this.category);
+
+  effect(() => {
+    this.loadProductsByCategory(this.category);
+    });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['category'] && !changes['category'].firstChange) {
-      this.loadProducts();
-    }
-  }
-  getStars(rating: number): { filled: boolean }[] {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push({ filled: i <= Math.floor(rating) }); 
-    }
-    return stars;
-  }
   
-  loadProducts(): void {
-    this.productService.loadProducts();
-  }
+  
+//   loadProducts(): void {
+//     this.productService.loadProducts();
+//   }
 
-  loadProductsByCategory(category: string | null): void {
+  // fetch products by categ/ all if no category is selected
+  private loadProductsByCategory(category: string | null): void {
     if (category) {
       this.productService.loadProductsByCategory(category);
     } else {
-      this.loadProducts();
+      this.productService.loadProducts();
     }
+}
+  getStars(rating: number): { filled: boolean }[] {
+    return getStars(rating);  // This will return the star array for the given rating
   }
-  // loadProducts():void {
-  //   if (this.category) {
-  //     this.productService.loadProductsByCategory(this.category);
-  //   } else {
-  //     this.productService.loadProducts();
-  //   }
-    
-  // }
-    
 }

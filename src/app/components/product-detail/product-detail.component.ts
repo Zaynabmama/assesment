@@ -1,8 +1,10 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Product, ProductService } from '../../services/product.service';
+import { ProductService } from '../../services/product.service';
 import { CommonModule, Location } from '@angular/common';
 import { ProductCatalogComponent } from "../product-catalog/product-catalog.component";
+import { getStars } from '../../utils/rating.utils';
+import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-product-detail',
@@ -12,10 +14,7 @@ import { ProductCatalogComponent } from "../product-catalog/product-catalog.comp
   styleUrl: './product-detail.component.css'
 })
 export class ProductDetailComponent implements OnInit {
-addToCart() {
-throw new Error('Method not implemented.');
-}
-product = signal<Product | null>(null);
+  product = signal<Product | null>(null);
 
   constructor(
     private route: ActivatedRoute,
@@ -24,40 +23,21 @@ product = signal<Product | null>(null);
   ) {}
 
   ngOnInit(): void {
+    this.product = this.productService.productById;
     const productId = +this.route.snapshot.paramMap.get('id')!;
     if (productId) {
-      this.loadProduct(productId);
+      this.productService.getProductById(productId);
     }
   }
   
 
-  // loadProduct(productId: number): void {
-  //   const cachedProduct = this.productService.products().find(p => p.id === productId);
-  //   if (cachedProduct) {
-  //     this.product.set(cachedProduct);
-  //   } else {
-  //     this.productService.getProductById(productId).subscribe(
-  //       (data: Product) => this.product.set(data),
-  //       (error) => console.error(error)
-  //     );
-  //   }
-  loadProduct(productId: number): void {
-    this.productService.getProductById(productId).subscribe(
-      (data: Product) => this.product.set(data),
-      (error) => console.error(error)
-    );
-  }
 
   getStars(rating: number): { filled: boolean }[] {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push({ filled: i <= Math.floor(rating) });
-    }
-    return stars;
+    return getStars(rating);  // This will return the star array for the given rating
   }
-
- 
-
+  addToCart() {
+    throw new Error('Method not implemented.');
+    }
   goBack(): void {
     this.location.back();
   }
